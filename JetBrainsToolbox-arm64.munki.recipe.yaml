@@ -1,0 +1,31 @@
+Description: Imports the Apple Silicon build of JetBrains Toolbox into Munki. Edit the Input and pkginfo sections to match your environment.
+Identifier: local.munki.JetBrainsToolbox-arm64
+MinimumVersion: "2.4.1"
+ParentRecipe: local.download.JetBrainsToolbox-arm64
+Input:
+  NAME: JetBrainsToolbox
+  MUNKI_REPO_SUBDIR: apps/JetBrainsToolbox
+  MUNKI_CATALOG: testing
+  MUNKI_CATEGORY: Developer Tools
+  MUNKI_DEVELOPER: JetBrains
+  MUNKI_DESCRIPTION: Manages installations and updates of JetBrains IDEs.
+  MUNKI_DISPLAY_NAME: JetBrains Toolbox
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+      pkginfo:
+        blocking_applications:
+          - JetBrains Toolbox
+        catalogs:
+          - "%MUNKI_CATALOG%"
+        category: "%MUNKI_CATEGORY%"
+        developer: "%MUNKI_DEVELOPER%"
+        description: "%MUNKI_DESCRIPTION%"
+        display_name: "%MUNKI_DISPLAY_NAME%"
+        name: "%NAME%"
+        supported_architectures:
+          - arm64
+        unattended_install: true
+

@@ -1,0 +1,24 @@
+Description: Downloads the latest stable JetBrains Toolbox App for Apple Silicon and verifies its code signature.
+Identifier: local.download.JetBrainsToolbox-arm64
+MinimumVersion: "2.4.1"
+Input:
+  NAME: JetBrainsToolbox
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release
+      re_pattern: '"macM1":\{"link":"(?P<url>https://download\.jetbrains\.com/toolbox/jetbrains-toolbox-(?P<version>[0-9.]+)-arm64\.dmg)"'
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%version%-arm64.dmg"
+
+  - Processor: DmgMounter
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%mount_point%/JetBrains Toolbox.app"
+      requirement: 'identifier "com.jetbrains.toolbox" and anchor apple generic and certificate leaf[subject.OU] = "2BFCWG5935"'
+
+  - Processor: EndOfCheckPhase
+
